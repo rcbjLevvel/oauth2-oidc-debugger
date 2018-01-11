@@ -1,3 +1,5 @@
+var displayOpenIDConnectArtifacts = false;
+
 function OnSubmitForm()
 {
   console.log("Entering OnSubmitForm().");
@@ -835,4 +837,19 @@ function parseFragment()
       return result;
   }, {});
   return result;
+}
+
+function displayOIDCArtifacts()
+{
+  console.log("Entering displayOIDCArtifacts().");
+  var yesCheck = document.getElementById("yesCheckOIDCArtifacts").checked;
+  var noCheck = document.getElementById("noCheckOIDCArtifacts").checked;
+  console.log("yesCheckOIDCArtifacts=" + yesCheck, "noCheckOIDCArtifacts=" + noCheck);
+  if(yesCheck) {
+    displayOpenIDConnectArtifacts = true;
+    //Make 
+  } else if(noCheck) {
+    displayOpenIDConnectArtifacts = false;
+  }
+  console.log("Leaving displayOIDCArtifacts().");
 }

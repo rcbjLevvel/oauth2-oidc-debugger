@@ -13,6 +13,7 @@
   <option value="implicit_grant">OAuth2 Implicit Grant</option>
   <option value="resource_owner">OAuth2 Resource Owner Password Credential Grant</option>
   <option value="client_credential">OAuth2 Client Credential</option>
+  <option value="oauth2_refresh_grant">OAuth2 Refresh Grant</option>
   <option value="oidc_authorization_code_flow">OIDC Authorization Code Flow(code)</option>
   <option value="oidc_implicit_flow">OIDC Implicit Flow(id_token token)</option>
   <option value="oidc_implicit_flow_id_token">OIDC Implicit Flow(id_token)</option>
@@ -32,6 +33,20 @@
     <label>Token Endpoint: </label><input type="text" name="token_endpoint" id="token_endpoint" class="stored"/>
   </div>
 </form>
+<form id="configuration" name="configuration" action="">
+  <div class="form-group">
+    <label>Display OIDC Related Artifacts?</lable> Yes
+    <input type="radio" onclick="javascript:displayOIDCArtifacts();" name="yesno" id="yesCheckOIDCArtifacts"/>No
+    <input type="radio" onclick="javascript:displayOIDCArtifacts();" name="yesno" id="noCheckOIDCArtifacts"/>
+  </div>
+  <div class="password-form-group" id="password-form-group3">
+    SSL Certificate Validation: Yes
+    <input type="radio" name="sslValidation" id="SSLValidate-yes" value="true" checked="true"/>No
+    <input type="radio" name="sslValidation" id="SSLValidate-no" value="false"/>
+    <br>
+  </div>
+</form>
+
 <div class="step2" id="step2">
 <h2 id="h2_title_1">Request Authorization Code</h2>
 <form name="auth_step" id="auth_step" method="get" onsubmit="return OnSubmitForm();">
@@ -126,12 +141,6 @@
     <label>Resource: </label>
     <input type="text" name="token_resource"  class="stored" id="token_resource"/>
   </div>
-  <div class="password-form-group" id="password-form-group3">
-    SSL Certificate Validation: Yes
-    <input type="radio" name="sslValidation" id="SSLValidate-yes" value="true" checked="true"/>No
-    <input type="radio" name="sslValidation" id="SSLValidate-no" value="false"/>
-    <br>
-  </div>
 
   <input type="submit" class="btn1" value="Get Token">
 </form>
@@ -155,3 +164,38 @@
 <div class="token_endpoint_result" id="token_endpoint_result">
 </div>
 
+<h2 id="h2_title_3">Obtain New Access Token Using Refresh Token</h2>
+
+<form name="refresh_step" id="refresh_step" method="post" onsubmit="return OnSubmitTokenEndpointForm();" >
+  <div class="form-group">
+    <label>Refresh Token: </label>
+    <input type="text" name="refresh_refresh_token" id="refresh_refresh_token" value="<%= defined?(@code) ? @code : '' %>" class="input" />
+  </div>
+  <div class="form-group">
+    <label>Client ID: </label>
+    <input type="text" name="refresh_client_id"  class="input" id="refresh_client_id" />
+  </div>
+  <div class="form-group">
+    <label>Client Secret: </label>
+    <input type="text" name="refresh_client_secret" class="input" id="refresh_token_client_secret" />
+    <input type="hidden" name="refresh_grant_type" id="refresh_grant_type" class="input" value="authorization_code" />
+  </div>
+  <div class="form-group">
+    <label>Scope </label>
+    <input type="text" name="refresh_scope" value="" class="input" id="refresh_scope" />
+  </div>
+  <input type="submit" class="btn1" value="Get Token">
+</form>
+
+<div class="display_refresh_request" id="display_refresh_request">
+  <form action="" name="display_refresh_request_form" id="display_refresh_request_form">
+    <label name="display_refresh_request_form_label1" value="" id="display_refresh_request_form_label1">Request</label>
+    <textarea rows="10" cols="100" id="display_refresh_request_form_textarea1"></textarea>
+  </form>
+</div>
+
+<div class="display_refresh_error_class" id="display_refresh_error_class">
+</div>
+
+<div class="refresh_endpoint_result" id="refresh_endpoint_result">
+</div>

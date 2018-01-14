@@ -1029,9 +1029,10 @@ form {
 }
 
 fieldset {
-  padding: 0;
-  margin: 0;
-  border: 0;
+    margin: 8px;
+    border: 1px solid silver;
+    padding: 8px;    
+    border-radius: 4px;
 }
 
 legend {

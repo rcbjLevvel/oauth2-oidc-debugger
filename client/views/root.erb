@@ -4,7 +4,9 @@
 <h1>OAuth2 or OpenID Connect Debugger</h1>
 
 <p>This is a simple Client to use with any <a href="https://medium.com/@robert.broeckelmann/saml2-vs-jwt-understanding-oauth2-4abde9e7ec8b">OAuth2</a> or <a href="https://medium.com/@robert.broeckelmann/understanding-openid-connect-series-37c93d25e92b">OpenID Connect</a> compliant identity provider..</p>
-<h2>Choose Authorization Grant</h2>
+
+<fieldset>
+<legend>Choose Authorization Grant</legend>
 <form id="authorization_grant" name="authorization_grant" action="">
   <div class="form-group">
     <label>Authorization Grant: </label>
@@ -23,8 +25,10 @@
 </select>
   </div>
 </form>
+</fieldset>
 
-<h2>Enter Endpoints</h2>
+<fieldset>
+<legend>Configuration Parameters</legend>
 <form id="endpoints" name="endpoints" action="">
   <div class="form-group">
     <label>Authorization Endpoint: </label><input type="text" name="authorization_endpoint" id="authorization_endpoint" class="stored"/>
@@ -46,9 +50,11 @@
     <br>
   </div>
 </form>
+</fieldset>
 
+<fieldset>
+<legend>Request Authorization Code</legend>
 <div class="step2" id="step2">
-<h2 id="h2_title_1">Request Authorization Code</h2>
 <form name="auth_step" id="auth_step" method="get" onsubmit="return OnSubmitForm();">
   <div class="form-group">
     <label>State: </label><input type="text" name="state" value="" id="state" onchange="recalculateAuthorizationRequestDescription();" />
@@ -81,24 +87,23 @@
     <label>Resource: </label>
     <input type="text" name="resource"  class="stored" id="resource"/>
   </div>
-
   <input type="submit" class="btn2" value="Authorize" />
 </form>
 </div>
-
 <div class="display_authz_request_class" id="display_authz_request_class">
   <form action="" name="display_authz_request_form" id="display_authz_request_form">
     <label name="display_authz_request_form_label1" value="" id="display_authz_request_form_label1">Request</label>
     <textarea rows="10" cols="100" id="display_authz_request_form_textarea1"></textarea>
   </form>
 </div>
+</fieldset>
 
 <div class="display_authz_error_class" id="display_authz_error_class">
 </div>
 
+<fieldset>
+<legend>Exchange Authorization Code for Access Token</legend>
 <div class="step3" id="step3">
-<h2 id="h2_title_2">Exchange Authorization Code for Access Token</h2>
-
 <form name="token_step" id="token_step" method="post" onsubmit="return OnSubmitTokenEndpointForm();" >
   <div class="form-group">
     <label>Authorization Code: </label>
@@ -145,13 +150,13 @@
   <input type="submit" class="btn1" value="Get Token">
 </form>
 </div>
-
 <div class="display_token_request" id="display_token_request">
 <form action="" name="display_token_request_form" id="display_token_request_form">
 <label name="display_token_request_form_label1" value="" id="display_token_request_form_label1">Request</label>
 <textarea rows="10" cols="100" id="display_token_request_form_textarea1"></textarea>
 </form>
 </div>
+</fieldset>
 
 <div class="display_token_error_class" id="display_token_error_class">
 </div>
@@ -164,8 +169,8 @@
 <div class="token_endpoint_result" id="token_endpoint_result">
 </div>
 
-<h2 id="h2_title_3">Obtain New Access Token Using Refresh Token</h2>
-
+<fieldset>
+<legend>Obtain New Access Token Using Refresh Token</legend>
 <form name="refresh_step" id="refresh_step" method="post" onsubmit="return OnSubmitTokenEndpointForm();" >
   <div class="form-group">
     <label>Refresh Token: </label>
@@ -186,13 +191,13 @@
   </div>
   <input type="submit" class="btn1" value="Get Token">
 </form>
-
 <div class="display_refresh_request" id="display_refresh_request">
   <form action="" name="display_refresh_request_form" id="display_refresh_request_form">
     <label name="display_refresh_request_form_label1" value="" id="display_refresh_request_form_label1">Request</label>
     <textarea rows="10" cols="100" id="display_refresh_request_form_textarea1"></textarea>
   </form>
 </div>
+</fieldset>
 
 <div class="display_refresh_error_class" id="display_refresh_error_class">
 </div>

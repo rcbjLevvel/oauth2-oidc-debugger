@@ -74,11 +74,27 @@ $(document).ready(function() {
       var dataString = "";
       if(grant_type == "authorization_code")
       {
-        dataString = "grant_type=" + grant_type + "&client_id="+ client_id + "&code=" + code + "&redirect_uri=" + redirect_uri + "&scope=" + scope + "&token_endpoint=" + token_endpoint + "&sslValidate=" + sslValidate;
+        dataString = "grant_type=" + grant_type + 
+		     "&client_id="+ client_id + 
+                     "&code=" + code + 
+                     "&redirect_uri=" + redirect_uri + 
+                     "&scope=" + scope + 
+                     "&token_endpoint=" + token_endpoint + 
+                      "&sslValidate=" + sslValidate;
       } else if( grant_type == "password") {
-        dataString = "grant_type=" + grant_type + "&client_id="+ client_id + "&username=" + username + "&password=" + password + "&scope=" + scope + "&token_endpoint=" + token_endpoint + "&sslValidate=" + sslValidate;
+        dataString = "grant_type=" + grant_type + 
+                     "&client_id="+ client_id + 
+                     "&username=" + username + 
+                     "&password=" + password + 
+                     "&scope=" + scope + 
+                     "&token_endpoint=" + token_endpoint + 
+                     "&sslValidate=" + sslValidate;
       } else if( grant_type == "client_credentials") {
-        dataString = "grant_type=" + grant_type + "&client_id="+ client_id + "&scope=" + scope + "&token_endpoint=" + token_endpoint + "&sslValidate=" + sslValidate;
+        dataString = "grant_type=" + grant_type + 
+                     "&client_id="+ client_id + 
+                     "&scope=" + scope + 
+                     "&token_endpoint=" + token_endpoint + 
+                     "&sslValidate=" + sslValidate;
       }
       var yesCheck = document.getElementById("yesCheckToken").checked;
       if(yesCheck) //add resource value to OAuth query string
@@ -100,7 +116,53 @@ $(document).ready(function() {
     url: "/token",
     data: dataString,
     success: function(data, textStatus, request) {
-      $("#token_endpoint_result").html("<H2>Token Endpoint Results:</H2><table><tr><td>access_token</td><td><textarea rows=10 cols=100>" + data.access_token + "</textarea></td></tr><tr><td>refresh_token</td><td><textarea rows=10 cols=100>" + data.refresh_token + "</textarea></td></tr><tr><td>id_token</td><td><textarea rows=10 cols=100>" + data.id_token + "</textarea></td></tr></table>");
+      var token_endpoint_result_html = "";
+      if(displayOpenIDConnectArtifacts == true)
+      {
+         token_endpoint_result_html = "<H2>Token Endpoint Results:</H2>" + 
+				      "<table>" +
+				        "<tr>" +
+                                          "<td>access_token</td>" + 
+                                          "<td><textarea rows=10 cols=100>" + 
+                                            data.access_token + 
+                                            "</textarea>" +
+                                          "</td>" +
+                                        "</tr>" +
+                                        "<tr>" +
+                                          "<td>refresh_token</td>" +
+                                          "<td><textarea rows=10 cols=100>" + 
+                                            data.refresh_token + 
+                                            "</textarea>" +
+                                          "</td>" +
+                                        "</tr>" +
+                                        "<tr>" +
+                                          "<td>id_token</td>" +
+                                          "<td><textarea rows=10 cols=100>" + 
+                                             data.id_token + 
+                                            "</textarea>" +
+                                          "</td>" +
+                                        "</tr>" +
+                                      "</table>";
+      } else {
+         token_endpoint_result_html = "<H2>Token Endpoint Results:</H2>" +
+                                      "<table>" +
+                                        "<tr>" +
+                                          "<td>access_token</td>" +
+                                          "<td><textarea rows=10 cols=100>" +
+                                            data.access_token +
+                                            "</textarea>" +
+                                          "</td>" +
+                                        "</tr>" +
+                                        "<tr>" +
+                                          "<td>refresh_token</td>" +
+                                          "<td><textarea rows=10 cols=100>" +
+                                            data.refresh_token +
+                                            "</textarea>" +
+                                          "</td>" +
+                                        "</tr>" +
+                                      "</table>";
+      }
+      $("#token_endpoint_result").html(token_endpoint_result_html);
     },
     error: function (request, status, error) {
       console.log("request: " + JSON.stringify(request));
@@ -212,6 +274,7 @@ function resetUI(value)
       $("#token_endpoint_result").html("");
       $("#display_authz_request_class").show();
       $("#display_token_request").hide();
+      displayOpenIDConnectArtifacts = true;
     }
     if ( value == "oidc_implicit_flow_id_token")
     {
@@ -232,6 +295,7 @@ function resetUI(value)
       $("#token_endpoint_result").html("");
       $("#display_authz_request_class").show();
       $("#display_token_request").hide();
+      displayOpenIDConnectArtifacts = true;
     }
     if( value == "oidc_authorization_code_flow")
     {
@@ -255,6 +319,7 @@ function resetUI(value)
       $("#display_authz_request_class").show();
       $("#display_token_request").show();
 //      document.getElementById("code").value = "";
+      displayOpenIDConnectArtifacts = true;
     }
     if( value == "oidc_hybrid_code_id_token")
     {
@@ -278,6 +343,7 @@ function resetUI(value)
       $("#display_authz_request_class").show();
       $("#display_token_request").show();
       document.getElementById("code").value = "";
+      displayOpenIDConnectArtifacts = true;
     }
     if( value == "oidc_hybrid_code_token")
     {
@@ -300,6 +366,7 @@ function resetUI(value)
       $("#token_endpoint_result").html("");
       $("#display_authz_request_class").show();
       $("#display_token_request").show();
+      displayOpenIDConnectArtifacts = true;
     }
     if( value == "oidc_hybrid_code_id_token_token")
     {
@@ -322,6 +389,7 @@ function resetUI(value)
       $("#token_endpoint_result").html("");
       $("#display_authz_request_class").show();
       $("#display_token_request").show();
+      displayOpenIDConnectArtifacts = true;
     }
     $("#display_authz_error_class").html("");
     $("#display_token_error_class").html("");
@@ -341,6 +409,8 @@ function writeValuesToLocalStorage()
       localStorage.setItem("token_resource", document.getElementById("token_resource").value);
       localStorage.setItem("yesCheckToken", document.getElementById("yesCheckToken").checked);
       localStorage.setItem("noCheckToken", document.getElementById("noCheckToken").checked);
+      localStorage.setItem("yesCheckOIDCArtifacts", document.getElementById("yesCheckOIDCArtifacts").checked);
+      localStorage.setItem("noCheckOIDCArtifacts", document.getElementById("noCheckOIDCArtifacts").checked);
   }
   console.log("Leaving writeValuesToLocalStorage().");
 }
@@ -374,12 +444,17 @@ function loadValuesFromLocalStorage()
   document.getElementById("noCheck").checked = localStorage.getItem("noCheck");
   document.getElementById("yesCheckToken").checked = localStorage.getItem("yesCheckToken");
   document.getElementById("noCheckToken").checked = localStorage.getItem("noCheckToken");
+  document.getElementById("yesCheckOIDCArtifacts").checked = localStorage.getItem("yesCheckOIDCArtifacts");
+  document.getElementById("noCheckOIDCArtifacts").checked = localStorage.getItem("noCheckOIDCArtifacts");
 
   var agt = document.getElementById("authorization_grant_type").value;
   var pathname = window.location.pathname;
   console.log("agt=" + agt);
   console.log("pathname=" + pathname);
-  if (  (agt ==  "authorization_grant" || agt == "oidc_hybrid_code_id_token" || agt == "oidc_hybrid_code_token" || agt == "oidc_hybrid_code_id_token_token" ) &&
+  if (  (agt ==  "authorization_grant" || 
+         agt == "oidc_hybrid_code_id_token" || 
+         agt == "oidc_hybrid_code_token" || 
+         agt == "oidc_hybrid_code_id_token_token" ) &&
 	pathname == "/callback")
   {
     console.log("Checking for code.  agt=" + agt + ", pathname=" + pathname);
@@ -396,12 +471,16 @@ function loadValuesFromLocalStorage()
       document.getElementById("code").value = code;
     }
   }
-  if ( 	(agt == "implicit_grant" || agt == "oidc_implicit_flow" ) &&
+  if ( 	(agt == "implicit_grant" || 
+         agt == "oidc_implicit_flow" ) &&
 	pathname == "/callback") //retrieve access_token for implicit_grant for callback redirect response
   {
     var access_token = getParameterByName("access_token",window.location.href);
     console.log("access_token=" + access_token);
-    if(access_token == null || access_token == "null" || access_token == "" || typeof access_token == "undefined")
+    if(access_token == null || 
+       access_token == "null" || 
+       access_token == "" || 
+       typeof access_token == "undefined")
     {
       //Check to see if passed in as local anchor (ADFS & Azure Active Directory do this)
       console.log("fragement: " + parseFragment());
@@ -412,7 +491,17 @@ function loadValuesFromLocalStorage()
       }
     }
     console.log("access_token=" + access_token);
-    $("#authorization_endpoint_result").html("<H2>Authorization Endpoint Results:</H2><table><tr><td>access_token</td><td><textarea id=\"implicit_grant_access_token\" rows=5 cols=100>" + access_token + "</textarea></td></tr></table>");
+    var authorization_endpoint_result_html = "<H2>Authorization Endpoint Results:</H2>" +
+                                             "<table>" + 
+                                               "<tr>" +
+                                                 "<td>access_token</td>" +
+                                                 "<td><textarea id=\"implicit_grant_access_token\" rows=5 cols=100>" 
+                                                   + access_token + 
+                                                   "</textarea>" +
+                                                 "</td>" +
+                                               "</tr>" + 
+                                             "</table>";
+    $("#authorization_endpoint_result").html(authorization_endpoint_result_html);
   }
   if (  agt == "oidc_hybrid_code_id_token_token" &&
         pathname == "/callback") //retrieve access code and id_token that is returned from authorization endpoint.
@@ -436,7 +525,31 @@ function loadValuesFromLocalStorage()
     {
       id_token = "NO_ID_TOKEN_PRESENTED_IN_EXPECTED_LOCATIONS";
     }
-    $("#authorization_endpoint_result").html("<H2>Authorization Endpoint Results:</H2><table><tr><td>access_token</td><td><textarea id=\"implicit_grant_access_token\" rows=5 cols=100>" + access_token + "</textarea></td></tr><tr><td>id_token</td><td><textarea id=\"implicit_grant_access_token\" rows=5 cols=100>" + id_token + "</textarea></td></tr></table>");
+    var authz_endpoint_results_html = "";
+    if(displayOpenIDConnectArtifacts == true)
+    {
+      authz_endpoint_results_html = "<H2>Authorization Endpoint Results:</H2>" +
+				    "<table>" +
+				      "<tr>" +
+				        "<td>access_token</td>" +
+                                        "<td><textarea id=\"implicit_grant_access_token\" rows=5 cols=100>" + access_token + "</textarea></td>"
+				      "</tr>" + 
+				      "<tr>" +
+				        "<td>id_token</td>" + 
+				        "<td><textarea id=\"implicit_grant_access_token\" rows=5 cols=100>" + id_token + "</textarea></td>"
+				      "</tr>"
+				    "</table>";
+    } else {
+      authz_endpoint_results_html = "<H2>Authorization Endpoint Results:</H2>" +
+                                    "<table>" +
+                                      "<tr>" +
+                                        "<td>access_token</td>" +
+                                        "<td><textarea id=\"implicit_grant_access_token\" rows=5 cols=100>" + access_token + "</textarea></td>"
+                                      "</tr>" +
+                                    "</table>";
+
+    }
+    $("#authorization_endpoint_result").html(authz_endpoint_results_html);
   }
 
   if (  agt == "oidc_hybrid_code_token" &&
@@ -606,6 +719,9 @@ window.onload = function() {
   document.getElementById("resource").addEventListener("onkeypress", recalculateAuthorizationRequestDescription());
   document.getElementById("yesCheck").addEventListener("onClick", recalculateAuthorizationRequestDescription());
   document.getElementById("noCheck").addEventListener("onClick", recalculateAuthorizationRequestDescription());
+yesCheckOIDCArtifacts
+  document.getElementById("yesCheckOIDCArtifacts").addEventListener("onClick", recalculateAuthorizationRequestDescription());
+  document.getElementById("noCheckOIDCArtifacts").addEventListener("onClick", recalculateAuthorizationRequestDescription());
 
   if (localStorage) {
     // Add an event listener for form submissions
@@ -620,6 +736,9 @@ window.onload = function() {
       localStorage.setItem("resource", document.getElementById("resource").value);
       localStorage.setItem("yesCheck", document.getElementById("yesCheck").checked);
       localStorage.setItem("noCheck", document.getElementById("noCheck").checked);
+      localStorage.setItem("yesCheckOIDCArtifacts", document.getElementById("yesCheckOIDCArtifacts").checked);
+      localStorage.setItem("noCheckOIDCArtifacts", document.getElementById("noCheckOIDCArtifacts").checked);
+
       console.log("Leaving auth_step submit event listener function.");
     });
   }
@@ -847,9 +966,9 @@ function displayOIDCArtifacts()
   console.log("yesCheckOIDCArtifacts=" + yesCheck, "noCheckOIDCArtifacts=" + noCheck);
   if(yesCheck) {
     displayOpenIDConnectArtifacts = true;
-    //Make 
   } else if(noCheck) {
     displayOpenIDConnectArtifacts = false;
   }
+  console.log("displayOpenIDConnectArtifacts=" + displayOpenIDConnectArtifacts);
   console.log("Leaving displayOIDCArtifacts().");
 }
